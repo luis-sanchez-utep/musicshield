@@ -1,0 +1,63 @@
+---- byte Matches (62 in 6 files) ----
+Buffer.h:typedef unsigned char byte;	/**< 8 bits, unsigned */
+Buffer.h:    byte Name[11];
+Buffer.h:    byte Attr;
+Buffer.h:    byte NTRes;
+Buffer.h:    byte CrtTimeTenth;
+Buffer.h:    byte Ord;
+Buffer.h:    byte Attr;
+Buffer.h:    byte Type; /**< entry type, zero=long name component */
+Buffer.h:    byte Chksum;
+Buffer.h:    byte BS_jmpBoot[3];		/**< x86 Boot Jump Code */
+Buffer.h:    byte BS_OEMName[8];		/**< Formatter's name, usually "MSWIN4.1" */
+Buffer.h:    byte BPB_SecPerClus;	/**< Sectors per Cluster (1,2,4,8,..,128) */
+Buffer.h:    byte BPB_NumFATs;		/**< Number of FATs (2) */
+Buffer.h:    byte BPB_Media;		/**< Media Type (eg 0xF8) */
+Buffer.h:	byte BS_DrvNum;		/**< DOS INT13 Drive Number (0x80=HD)*/
+Buffer.h:	byte BS_Reserved1;	/**< For WINNT; Format to 0 */
+Buffer.h:	byte BS_BootSig;	/**< 0x29 if next 3 fields are present */
+Buffer.h:	byte BS_VolID[4];	/**< Volume ID (usually format datetime) */
+Buffer.h:	byte BS_VolLab[11];	/**< Volume Label */
+Buffer.h:	byte BS_FilSysType[8];	/**< Decorative name of fs, eg "FAT16   "*/
+Buffer.h:	byte BPB_Reserved[12];	/**< Reserved, Always 0. */
+Buffer.h:	byte BS_DrvNum;      	/**< DOS INT13 Drive Number (0x80=HD) */
+Buffer.h:	byte BS_Reserved1;      /**< For WINNT, Format to 0 */
+Buffer.h:	byte BS_BootSig;	/**< 0x29 if next 3 fields are present */
+Buffer.h:	byte BS_VolID[4];	/**< Volume ID (usually format datetime) */
+Buffer.h:	byte BS_VolLab[11];	/**< Volume Label */
+Buffer.h:	byte BS_FilSysType[8];  /**< Decorative name of fs, eg "FAT32   "*/
+Buffer.h: * Specification, version 1.03. Always use 512 byte disk block. */
+Buffer.h:    byte BS_jmpBoot[3];		/**< x86 Boot Jump Code */
+Buffer.h:    byte BS_OEMName[8];		/**< Formatter's name, usually "MSWIN4.1" */
+Buffer.h:    byte BPB_SecPerClus;	/**< Sectors per Cluster (1,2,4,8,..,128) */
+Buffer.h:    byte BPB_NumFATs;		/**< Number of FATs (2) */
+Buffer.h:    byte BPB_Media;		/**< Media Type (eg 0xF8) */
+Buffer.h:	byte BS_DrvNum;		/**< DOS INT13 Drive Number (0x80=HD)*/
+Buffer.h:	byte BS_Reserved1;	/**< For WINNT; Format to 0 */
+Buffer.h:	byte BS_BootSig;	/**< 0x29 if next 3 fields are present */
+Buffer.h:	byte BS_VolID[4];	/**< Volume ID (usually format datetime) */
+Buffer.h:	byte BS_VolLab[11];	/**< Volume Label */
+Buffer.h:	byte BS_FilSysType[8];	/**< Decorative name of fs, eg "FAT16   "*/
+Buffer.h:	byte BPB_Reserved[12];	/**< Reserved, Always 0. */
+Buffer.h:	byte BS_DrvNum;      	/**< DOS INT13 Drive Number (0x80=HD) */
+Buffer.h:	byte BS_Reserved1;      /**< For WINNT, Format to 0 */
+Buffer.h:	byte BS_BootSig;	/**< 0x29 if next 3 fields are present */
+Buffer.h:	byte BS_VolID[4];	/**< Volume ID (usually format datetime) */
+Buffer.h:	byte BS_VolLab[11];	/**< Volume Label */
+Buffer.h:	byte BS_FilSysType[8];  /**< Decorative name of fs, eg "FAT32   "*/
+Buffer.h:    byte buf[512];		/**< Raw Data */
+Buffer.h:/** 32-bit data type that is also "byte addressable".
+Buffer.h: * \warning Byte order is for LITTLE-ENDIAN ARCHITECTURES, change
+Buffer.h: * byte order for big-endian compilers/architectures! */
+Filesys.c:byte IS_FAT_32;
+Filesys.c:byte IS_FAT_12 = 0;
+Filesys.c:  /* First, let's get rid of the idea that we have byte addresses
+Filesys.h:extern byte IS_FAT_32;
+Storage.c:/** Read one 512 byte disk sector to extern global char[512] diskSect.
+Vs10xx.c:  /* Send dummy SPI byte to initialize atmel SPI */
+Vs10xx.c:  /* Send dummy SPI byte to initialize SPI of Atmel microcontroller */
+Vs10xx.c:  /* As an example, let's write value 0x0820 to register 00 byte by byte    */
+Vs10xx.c:  SPIPutChar(VS_WRITE_COMMAND);      /* Send SPI Byte, then wait for byte to be sent.   */
+Vs10xx.c:  SPIPutChar(0x08);      /* This byte goes to MSB                           */
+Vs10xx.h:/** VS10xx SCI Write Command byte is 0x02 */
+Vs10xx.h:/** VS10xx SCI Read Command byte is 0x03 */
