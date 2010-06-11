@@ -128,7 +128,7 @@ unsigned char MmcCommand(unsigned char c1,
 
   //read agin to ensure MISO == 0xFF , this is very important
   //while ((temp = MMC_ReadByte() !=0xff) && (++i<20000));
-  /*do
+  do
   {
   	SPDR =0xFF;
   	SPIWait();
@@ -136,7 +136,7 @@ unsigned char MmcCommand(unsigned char c1,
 	//temp = MMC_ReadByte();
 	++i;
   }while(temp != 0xff && i<2000);
-  */
+  
   //Serial.println("test 1");
 
   // The bus should be stable high now

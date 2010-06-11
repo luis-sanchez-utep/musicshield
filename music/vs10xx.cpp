@@ -26,7 +26,7 @@ void LoadUserPatch(void)
   int i = 0;
   int length = sizeof(patch);
   int dataSize = sizeof(patch[0]); 
-  Serial.println(length);
+  //Serial.println(length);
   while (i<length/dataSize) 
   {
     unsigned short addr, n, val;
@@ -50,8 +50,6 @@ void LoadUserPatch(void)
     ;
 }
 
-
-
 void Mp3WriteRegister(unsigned char addressbyte,unsigned char highbyte,unsigned char lowbyte)
 { 
   Mp3DeselectData();
@@ -59,6 +57,21 @@ void Mp3WriteRegister(unsigned char addressbyte,unsigned char highbyte,unsigned 
   //SPIPutCharWithoutWaiting(VS_WRITE_COMMAND); 
   SPIPutChar(VS_WRITE_COMMAND); 
   //delay(1);
+  SPIPutChar((addressbyte)); 
+
+  SPIPutChar((highbyte)); 
+  SPIPutChar((lowbyte)); 
+  SPIWait(); 
+  Mp3DeselectControl(); 
+}
+
+void Mp3WriteRegisterWithDelay(unsigned char addressbyte,unsigned char highbyte,unsigned char lowbyte)
+{ 
+  Mp3DeselectData();
+  Mp3SelectControl(); 
+  //SPIPutCharWithoutWaiting(VS_WRITE_COMMAND); 
+  SPIPutChar(VS_WRITE_COMMAND); 
+  delay(10);
   SPIPutChar((addressbyte)); 
 
   SPIPutChar((highbyte)); 
@@ -99,7 +112,7 @@ void Mp3SoftReset(){
   while (!MP3_DREQ); /* wait for startup */
     
   /* Set clock register, doubler etc. */
-  Mp3WriteRegister(SPI_CLOCKF, 0xa0, 0x00); 
+  Mp3WriteRegisterWithDelay(SPI_CLOCKF, 0xa0, 0x00); 
   while (!MP3_DREQ);
 
   LoadUserPatch();
@@ -114,7 +127,7 @@ void Mp3SoftResetWithoutPatch(){
   while (!MP3_DREQ) /* wait for startup */
     ; 
   /* Set clock register, doubler etc. */
-  Mp3WriteRegister(SPI_CLOCKF, 0xa0, 0x00); 
+  Mp3WriteRegisterWithDelay(SPI_CLOCKF, 0xa0, 0x00); 
   while (!MP3_DREQ);
 
   //ConsoleWrite("\r\nBefore setting Sample rate:");
@@ -157,7 +170,7 @@ void Mp3Reset()
 #endif
   
   /* Set clock register, doubler etc. */
-  Mp3WriteRegister(SPI_CLOCKF, 0xa0, 0x00); 
+  Mp3WriteRegisterWithDelay(SPI_CLOCKF, 0xa0, 0x00); 
 #if 1
   Serial.print("\r\nClockF:");
   Serial.println(Mp3ReadRegister(SPI_CLOCKF),HEX);
@@ -291,7 +304,7 @@ unsigned char PlayDiskSectors (unsigned int nSectorsToPlay)
   /** How many sectors to send between ff/rew commands */
   
 
-  PrepareToReadDiskSector(sectorAddress.l);
+  //PrepareToReadDiskSector(sectorAddress.l);
   
   while (nSectorsToPlay--)
   {
@@ -311,10 +324,10 @@ unsigned char PlayDiskSectors (unsigned int nSectorsToPlay)
     }
  	
     sectorAddress.l++;
-    if (nSectorsToPlay){
-      /*Do not seek after the last sector*/
+    /*if (nSectorsToPlay){
+      //Do not seek after the last sector
       PrepareToReadDiskSector(sectorAddress.l);
-    }
+    }*/
 
     Mp3SelectData();
 
