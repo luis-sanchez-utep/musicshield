@@ -14,8 +14,8 @@ void InitSPI()
 	DDRB |= (1 << SPICS);
 	#endif
 
-	SPCR = (1 << SPE) | (1 << MSTR) | (1 << SPR0);//| (1 << SPR1) ;//SPICLK=CPU/16
-	SPSR = 0x00;	
+	SPCR = (1 << SPE) | (1 << MSTR) |(1 << SPR1);// | (1 << SPR0) ;//SPICLK=CPU/64
+        SPSR = 0;
 	
 	PORTB |= (1 << SPICS);//deselect mmc when initial
   //Serial.println("Initial SPI ok!");

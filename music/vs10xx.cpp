@@ -17,8 +17,8 @@
 
 #define SKIP_PLUGIN_VARNAME
 PROGMEM const unsigned short patch[] = {
-#include "vs1053b_patches.h"
-//#include "vs1053b_patches_flac.h"
+//#include "vs1053b_patches.h"
+#include "vs1053b_patches_flac.h"
 };
 
 void LoadUserPatch(void) 
@@ -52,6 +52,8 @@ void LoadUserPatch(void)
 
 void Mp3WriteRegister(unsigned char addressbyte,unsigned char highbyte,unsigned char lowbyte)
 { 
+  //SPSR = 0;	
+  
   Mp3DeselectData();
   Mp3SelectControl(); 
   //SPIPutCharWithoutWaiting(VS_WRITE_COMMAND); 
@@ -63,10 +65,14 @@ void Mp3WriteRegister(unsigned char addressbyte,unsigned char highbyte,unsigned 
   SPIPutChar((lowbyte)); 
   SPIWait(); 
   Mp3DeselectControl(); 
+  
+  //SPSR = (1<<SPI2X);	
 }
 
 void Mp3WriteRegisterWithDelay(unsigned char addressbyte,unsigned char highbyte,unsigned char lowbyte)
 { 
+  //SPSR = 0;	
+  
   Mp3DeselectData();
   Mp3SelectControl(); 
   //SPIPutCharWithoutWaiting(VS_WRITE_COMMAND); 
@@ -78,6 +84,8 @@ void Mp3WriteRegisterWithDelay(unsigned char addressbyte,unsigned char highbyte,
   SPIPutChar((lowbyte)); 
   SPIWait(); 
   Mp3DeselectControl(); 
+  
+  //SPSR = (1<<SPI2X);	
 }
 
 /** Read the 16-bit value of a VSer */
@@ -112,7 +120,7 @@ void Mp3SoftReset(){
   while (!MP3_DREQ); /* wait for startup */
     
   /* Set clock register, doubler etc. */
-  Mp3WriteRegisterWithDelay(SPI_CLOCKF, 0xa0, 0x00); 
+  Mp3WriteRegisterWithDelay(SPI_CLOCKF, 0xb8, 0x00); 
   while (!MP3_DREQ);
 
   LoadUserPatch();
@@ -127,7 +135,7 @@ void Mp3SoftResetWithoutPatch(){
   while (!MP3_DREQ) /* wait for startup */
     ; 
   /* Set clock register, doubler etc. */
-  Mp3WriteRegisterWithDelay(SPI_CLOCKF, 0xa0, 0x00); 
+  Mp3WriteRegisterWithDelay(SPI_CLOCKF, 0xb8, 0x00); 
   while (!MP3_DREQ);
 
   //ConsoleWrite("\r\nBefore setting Sample rate:");
@@ -170,7 +178,7 @@ void Mp3Reset()
 #endif
   
   /* Set clock register, doubler etc. */
-  Mp3WriteRegisterWithDelay(SPI_CLOCKF, 0xa0, 0x00); 
+  Mp3WriteRegisterWithDelay(SPI_CLOCKF, 0xb8, 0x00); 
 #if 1
   Serial.print("\r\nClockF:");
   Serial.println(Mp3ReadRegister(SPI_CLOCKF),HEX);
@@ -305,12 +313,15 @@ unsigned char PlayDiskSectors (unsigned int nSectorsToPlay)
   
 
   //PrepareToReadDiskSector(sectorAddress.l);
-  
+       SPCR = (1 << SPE) | (1 << MSTR);// //SPICLK=CPU/4
+
+     
   while (nSectorsToPlay--)
   {
   
   
     AvailableProcessorTime();
+    
 
     ReadDiskSector(sectorAddress.l);
 
@@ -320,6 +331,7 @@ unsigned char PlayDiskSectors (unsigned int nSectorsToPlay)
 	(playingState==PS_NEXT_SONG)||
 	(playingState==PS_RECORDING)||
 	(playingState==PS_PREVIOUS_SONG)){
+  	SPCR = (1 << SPE) | (1 << MSTR) |(1 << SPR1);//| (1 << SPR1);//SPICLK=CPU/64
       return playingState;
     }
  	
@@ -328,7 +340,9 @@ unsigned char PlayDiskSectors (unsigned int nSectorsToPlay)
       //Do not seek after the last sector
       PrepareToReadDiskSector(sectorAddress.l);
     }*/
+   //Mp3WriteRegister (SPI_MODE, 0x0C, 0x00); /* Newmode, No L1-2 */
 
+     
     Mp3SelectData();
 
 
@@ -349,8 +363,8 @@ unsigned char PlayDiskSectors (unsigned int nSectorsToPlay)
       //LED_OFF(GREEN_LED);
       /* Send 32 octets of disk block data to VS10xx */
 
-      //Mp3WriteRegister (SPI_MODE, 0x0C, 0x00); /* Newmode, No L1-2 */
-     
+   
+        
       SPIPutCharWithoutWaiting(*dataBufPtr++);
       SPIWait();
       SPIPutChar(*dataBufPtr++);
@@ -391,12 +405,14 @@ unsigned char PlayDiskSectors (unsigned int nSectorsToPlay)
 
     }
 	//SPISpeed(SPI1, SPI_BaudRatePrescaler_256);
+
+        
 	//isWritingVs = 0;
     SPIWait();
     Mp3DeselectData();
   }
 
-
+	SPCR = (1 << SPE) | (1 << MSTR) |(1 << SPR1);//| (1 << SPR1);//SPICLK=CPU/64
   return 0; //OK Exit
 }
 
