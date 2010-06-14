@@ -9,6 +9,10 @@
 #include "myDelay.h"
 #include "ui.h"
 #include "vs10xx.h"
+#include "wiring.h"
+//#include "NewSoftSerial.h"
+
+//extern NewSoftSerial mySerial;
 
 /** Playing State Global */
  playingstatetype playingState = PS_NORMAL;
@@ -57,12 +61,37 @@ void PlayCurrentFile()
   playingState = PS_NEXT_SONG;
 }
 
-//check play or stop
-/*void CheckPlay()
+
+unsigned char g_volume = 40;//used for controling the volume
+int redPwm = 200;//used for controling the brightness of red led
+unsigned int greenFreq = 5000;//used for controling the flash frequency of green led
+
+
+void ControlLed()
 {
-	playStop = 1;
+	static unsigned char greenOnOff = 1;
+	
+	
+	if( 0 == greenFreq--)
+	{
+		greenOnOff = 1-greenOnOff;
+		greenFreq = 5000;
+	}
+	if(greenOnOff)
+	{
+		GREEN_LED_ON();
+	}
+	else
+	{
+		GREEN_LED_OFF();
+	}	
+
+	//analogWrite(9,redPwm);
+	
 }
-*/
+
+
+
 void CheckKey()
 {
   static unsigned char volume = 40;
@@ -127,14 +156,28 @@ void CheckKey()
   }
 }
 
+
 /** This function is called when the player is playing a song
  and there is free processor time. The basic task of this
  function is to implement the player user interface. */
 void AvailableProcessorTime()
 {
 
-  CheckKey();
-  //do other things
+	do
+	{
+  		CheckKey();
+  
+ 		 //IPODCommandProcess();
+		 
+		if(0 == playStop)
+		{
+			GREEN_LED_ON();
+		}	
+	}while(0 == playStop);
+	
+  	//do other things
+	ControlLed();
+
 }
 
 void Play()
