@@ -331,7 +331,7 @@ unsigned char PlayDiskSectors (unsigned int nSectorsToPlay)
 	(playingState==PS_NEXT_SONG)||
 	(playingState==PS_RECORDING)||
 	(playingState==PS_PREVIOUS_SONG)){
-  	SPCR = (1 << SPE) | (1 << MSTR) |(1 << SPR1);//| (1 << SPR1);//SPICLK=CPU/64
+  	SPCR = (1 << SPE) | (1 << MSTR) |(1 << SPR0);//| (1 << SPR1);//SPICLK=CPU/16
       return playingState;
     }
  	
@@ -412,7 +412,7 @@ unsigned char PlayDiskSectors (unsigned int nSectorsToPlay)
     Mp3DeselectData();
   }
 
-	SPCR = (1 << SPE) | (1 << MSTR) |(1 << SPR1);//| (1 << SPR1);//SPICLK=CPU/64
+	SPCR = (1 << SPE) | (1 << MSTR) |(1 << SPR0);//| (1 << SPR1);//SPICLK=CPU/16
   return 0; //OK Exit
 }
 
