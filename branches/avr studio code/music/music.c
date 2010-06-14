@@ -6,6 +6,9 @@
 #include "player.h"
 #include "vs10xx.h"
 #include "wiring.h"
+//#include "NewSoftSerial.h"
+
+//NewSoftSerial mySerial(2, 3);//pin2-Rx,pin3-Tx(note: pin3 is actually later used as volume down input)
 
 void Setup()
 {
