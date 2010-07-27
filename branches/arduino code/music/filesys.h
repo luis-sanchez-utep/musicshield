@@ -3,7 +3,6 @@
 #define FILE_SYS_H
 
 #include "buffer.h"
-//#include "board.h"
 
 
 /** Use PSW User Definable Flag to indicate FAT16/32 */
