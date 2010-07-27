@@ -8,11 +8,8 @@
 #include "vs10xx.h"
 #include "hardwareserial.h"
 #include "ui.h"
-//#include "display.h"
-//#include "lcd.h"
 #include "config.h"
-//#include "myDelay.h"
-#include  <avr\pgmspace.h>
+#include  <avr/pgmspace.h>
 
 //extern unsigned char SPMax;
 

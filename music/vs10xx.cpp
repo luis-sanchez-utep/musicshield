@@ -5,14 +5,12 @@
  */
 
 #include "vs10xx.h"
-//#include "lcd.h"
 #include "filesys.h"
 #include "storage.h"
 #include "ui.h"
-//#include "hardwareserial.h"
-//#include "myDelay.h"
+
 #include "config.h"
-#include  <avr\pgmspace.h>
+#include  <avr/pgmspace.h>
 
 
 #define SKIP_PLUGIN_VARNAME
@@ -120,7 +118,7 @@ void Mp3SoftReset(){
   while (!MP3_DREQ); /* wait for startup */
     
   /* Set clock register, doubler etc. */
-  Mp3WriteRegisterWithDelay(SPI_CLOCKF, 0xb8, 0x00); 
+  Mp3WriteRegisterWithDelay(SPI_CLOCKF, 0xB8, 0x00); 
   while (!MP3_DREQ);
 
   LoadUserPatch();
@@ -135,7 +133,7 @@ void Mp3SoftResetWithoutPatch(){
   while (!MP3_DREQ) /* wait for startup */
     ; 
   /* Set clock register, doubler etc. */
-  Mp3WriteRegisterWithDelay(SPI_CLOCKF, 0xb8, 0x00); 
+  Mp3WriteRegisterWithDelay(SPI_CLOCKF, 0xB8, 0x00); 
   while (!MP3_DREQ);
 
   //ConsoleWrite("\r\nBefore setting Sample rate:");
@@ -178,7 +176,7 @@ void Mp3Reset()
 #endif
   
   /* Set clock register, doubler etc. */
-  Mp3WriteRegisterWithDelay(SPI_CLOCKF, 0xb8, 0x00); 
+  Mp3WriteRegisterWithDelay(SPI_CLOCKF, 0xB8, 0x00); 
 #if 1
   Serial.print("\r\nClockF:");
   Serial.println(Mp3ReadRegister(SPI_CLOCKF),HEX);

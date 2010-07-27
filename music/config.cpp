@@ -58,12 +58,19 @@ void InitIOForKeys()
 	DDRE &= ~(1<<PS);
 	DDRG &= ~(1<<VU);
 	DDRE &= ~(1<<NT);
+        //internal pull-high
+	PORTH |= (1<<VD | 1<<BK);
+	PORTE |= (1<<PS | 1<<NT);
+	PORTG |= 1<<VU ;
+
 	#else
 	DDRD &= ~(1<<VD);
 	DDRD &= ~(1<<BK);
 	DDRD &= ~(1<<PS);
 	DDRD &= ~(1<<VU);
 	DDRD &= ~(1<<NT);
+        //internal pull-high
+	PORTD |= (1<<VD | 1<<BK | 1<<PS | 1<<VU | 1<<NT);
 	#endif
 }
 

@@ -1,27 +1,8 @@
 
 #include "mmc.h"
 #include "config.h"
-//#include "myDelay.h"
 #include "buffer.h"
-//#include "hardwareserial.h"
 
-/*inline unsigned char MMC_ReadByte()
-{
-  unsigned char Data;
-  
-  SPDR =0xFF;
-  MSPIWait();
-  Data = SPDR;
-  
-  return Data;
-}
-
-inline void MMC_WriteByte(unsigned char Data)
-{
-  SPDR =Data;
-  MSPIWait();
-}
-*/
 
 unsigned char InitMMC()
 {

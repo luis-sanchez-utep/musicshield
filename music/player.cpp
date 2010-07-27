@@ -2,14 +2,11 @@
 #include "storage.h"
 #include "string.h"
 #include "mmc.h"
-//#include "record.h"
 #include "player.h"
 #include "config.h"
-//#include "hardwareserial.h"
-//#include "myDelay.h"
 #include "ui.h"
 #include "vs10xx.h"
-#include "../NewSoftSerial/NewSoftSerial.h"
+#include "NewSoftSerial.h"
 
 extern NewSoftSerial mySerial;
 

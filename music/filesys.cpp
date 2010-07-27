@@ -4,7 +4,6 @@
 #include "config.h"
 #include "storage.h"
 #include "string.h"
-//#include "hardwareserial.h"
 #include "mmc.h"
 #include "buffer.h"
 
