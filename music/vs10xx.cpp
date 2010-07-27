@@ -119,6 +119,15 @@ void Mp3SoftReset(){
     
   /* Set clock register, doubler etc. */
   Mp3WriteRegisterWithDelay(SPI_CLOCKF, 0xB8, 0x00); 
+  
+    //setup I2S (see page77 of the datasheet of vs1053 )
+  //set GPIO0 as output
+  Mp3WriteRegister(SPI_WRAMADDR, 0xc0, 0x17);
+  Mp3WriteRegister(SPI_WRAM, 0x00, 0xf0);
+  //enable I2S (MCLK enabled, 48kHz sample rate)
+  Mp3WriteRegister(SPI_WRAMADDR, 0xc0, 0x40);
+  Mp3WriteRegister(SPI_WRAM, 0x00, 0x0C);
+  
   while (!MP3_DREQ);
 
   LoadUserPatch();
@@ -206,7 +215,7 @@ void Mp3Reset()
   
   ///SPISetFastClock();
   //Serial.print("\r\nInit: VS10XX\r\n");
-
+  
 }
 
 /** VS10xx Sine Test Function - Good getting started example */ 
