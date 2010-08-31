@@ -12,3 +12,12 @@ Features:
 
 2010-6-11 9:45:56 Icing
 ***********************************
+
+music shield firmware v1.13
+changing log:	
+1. Add the setup of I2S function of vs1053
+2. Remove some debug info 
+3. Add the initialization for the buttons of internal pull high	
+4. Change SPI speed to cpu/4 when playing music, and in other circumstance to cpu/16. As in cpu/64,recording is not working well.
+
+2010-8-31 15:14:20 Icing
