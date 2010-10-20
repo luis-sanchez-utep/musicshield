@@ -5,6 +5,11 @@
 #include "player.h"
 #include "vs10xx.h"
 #include "record.h"
+
+#include <SdFat.h>
+#include <SdFatUtil.h>
+#include "newSDLib.h"
+
 #include <NewSoftSerial.h>
 NewSoftSerial mySerial(2, 3);//pin2-Rx,pin3-Tx(note: pin3 is actually later used as volume down input)
 
@@ -22,18 +27,21 @@ void setup()
   
   InitIOForLEDs();
 
-  InitFileSystem();
+  //InitFileSystem();
 
   //VsSineTest();
 
   Mp3Reset();
   
+  initialSDCard();
+  //openFile("trackM.ogg");
 }
 
 
 void loop()
 { 
-#if defined(__AVR_ATmega1280__)
+  playFile("trackM.ogg");
+/*#if defined(__AVR_ATmega1280__)
    // If play/stop button is pressed during boot, enter recording.
    if (0== PSKey)
    {
@@ -47,7 +55,7 @@ void loop()
    Play();
 
    while(1);
-  
+  */
 }
 
 

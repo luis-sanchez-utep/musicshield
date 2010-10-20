@@ -15,8 +15,8 @@
 
 #define SKIP_PLUGIN_VARNAME
 PROGMEM const unsigned short patch[] = {
-//#include "vs1053b_patches.h"
-#include "vs1053b_patches_flac.h"
+#include "vs1053b_patches.h"
+//#include "vs1053b_patches_flac.h"
 };
 
 void LoadUserPatch(void) 
