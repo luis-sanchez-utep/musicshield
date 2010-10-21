@@ -4,7 +4,9 @@
 
 #define READ_BUF_LEN  32
 
-void CheckKey();
+void controlLed();
+void scanKey();
+void AvailableProcessorTime();
 int playFile(char *fileName);
 
 #endif

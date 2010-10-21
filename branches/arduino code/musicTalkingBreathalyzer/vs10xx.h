@@ -9,9 +9,6 @@
 
 #include "config.h"
 
-//extern u8 isWritingVs;
-//extern u8 isLoadedPatch; //load patch flag
-
 /** VS10xx SCI Write Command byte is 0x02 */
 #define VS_WRITE_COMMAND 0x02
 
@@ -52,8 +49,6 @@
 #define SM_ADPCM_HP     0x2000   /**< VS10xx register */
 
 
-/** Playing State Global, 0=normal playing, 1=abort playing */
-///extern unsigned char playingState;
 
 void TestVsRegister();
 
@@ -92,16 +87,5 @@ void AvailableProcessorTime();
 void Mp3SoftResetWithoutPatch();
 
 void Mp3PowerOff();
-
-/** Load User Patch */
-//void LoadUserPatch(const unsigned short patch[], u32 length) ;
-
-//extern const unsigned short patch1[];
-//extern const unsigned short patch2[];
-//#define PLUGIN_SIZE1 605
-//#define PLUGIN_SIZE2 323
-
-//read a short data from flash
-//unsigned short pgm_read_short(const unsigned short *p);
 
 #endif
