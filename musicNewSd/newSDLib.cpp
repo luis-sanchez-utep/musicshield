@@ -59,6 +59,8 @@ int readFile(byte *buffer, int len)
 int playFile(char *fileName)
 {
 
+  Mp3SoftReset();
+  
   openFile(fileName);//open music file
 
     int len = 512;
@@ -66,8 +68,7 @@ int playFile(char *fileName)
   while(1)
   {
     readLen = readFile(diskSect.raw.buf,len);//read file content length of 512 every time
-    if(readLen <= 0)
-      break;
+    //Serial.println(readLen);
 
     Mp3SelectData();
 
@@ -84,46 +85,25 @@ int playFile(char *fileName)
           Mp3SelectData();
         }
       }
-      /* Send 32 octets of disk block data to VS10xx */
-      SPIPutCharWithoutWaiting(*dataBufPtr++);
-      SPIWait();
+      // Send music content data to VS10xx 
       SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      //LED_Sel();
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIWait();
     }
     SPIWait();
     Mp3DeselectData();
+    
+    if(readLen < len)
+    {
+      Mp3WriteRegister(SPI_MODE,0,SM_OUTOFWAV);
+      SendZerosToVS10xx();
+      break;
+    }
   };
+  Serial.println("played over\r\n");
+  
+  if(file.close() == 0)//close file
+  {
+    error("close file failed");
+  }
   return 0; //OK Exit
 }
 
