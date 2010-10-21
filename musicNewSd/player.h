@@ -10,9 +10,10 @@ extern playingstatetype playingState;
 
 extern unsigned char currentFile;
 
-void Play();
+//void Play();
 //void CheckPlay();
 void CheckKey();
+int playFile(char *fileName);
 
 #endif
 
