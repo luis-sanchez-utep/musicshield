@@ -21,7 +21,6 @@ void InitSPI()
   //Serial.println("Initial SPI ok!");
 }
 
-
 void SPIPutChar(unsigned char data)
 {
 	SPDR =data;

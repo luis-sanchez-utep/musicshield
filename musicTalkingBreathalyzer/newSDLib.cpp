@@ -20,17 +20,17 @@ int initialSDCard()
 {
   //SPI speed: 0 - F_CPU/2, 1 - F_CPU/4
   if (!card.init(0))
- {
-   error("card.init failed");
+  {
+    error("card.init failed");
     return 0;
- }
+  }
   // initialize a FAT16 volume
   if (!Fat16::init(&card))
- {
-   error("Fat16::init");
-   return 0;
- }
- return 1;
+  {
+    error("Fat16::init");
+    return 0;
+  }
+  return 1;
 }
 
 int openFile(char *fileName)
@@ -52,6 +52,7 @@ int readFile(byte *buffer, int len)
   readLen = file.read(buffer,len);
   return readLen;
 }
+
 
 
 

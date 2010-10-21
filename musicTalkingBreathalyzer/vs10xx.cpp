@@ -10,41 +10,6 @@
 #include "config.h"
 #include  <avr/pgmspace.h>
 
-
-#define SKIP_PLUGIN_VARNAME
-/*PROGMEM const unsigned short patch[] = {
-#include "vs1053b_patches.h"
-};
-
-void LoadUserPatch(void) 
-{
-  int i = 0;
-  int length = sizeof(patch);
-  int dataSize = sizeof(patch[0]); 
-  //Serial.println(length);
-  while (i<length/dataSize) 
-  {
-    unsigned short addr, n, val;
-    addr = pgm_read_word(&patch[i++]);
-    n = pgm_read_word(&patch[i++]);
-    if (n & 0x8000U) { // RLE run, replicate n samples 
-      n &= 0x7FFF;
-      val = pgm_read_word(&patch[i++]);
-      while (n--) {
-        Mp3WriteRegister(addr, val>>8, val & 0xff);
-        
-      }
-    } else {           //Copy run, copy n samples 
-      while (n--) {
-        val = pgm_read_word(&patch[i++]);
-        Mp3WriteRegister(addr, val>>8, val & 0xff);
-      }
-    }
-  }
-  //delay(1);
-  while (!MP3_DREQ);
-}*/
-
 void Mp3WriteRegister(unsigned char addressbyte,unsigned char highbyte,unsigned char lowbyte)
 { 
   //SPSR = 0;	
@@ -160,16 +125,10 @@ void Mp3SoftResetWithoutPatch(){
   Mp3WriteRegisterWithDelay(SPI_CLOCKF, 0xB8, 0x00); 
   while (!MP3_DREQ);
 
-  //ConsoleWrite("\r\nBefore setting Sample rate:");
-  //ConsolePutHex16(Mp3ReadRegister(SPI_AUDATA)); 
-  //ConsoleWrite("\r\n");
   
   Mp3WriteRegister(SPI_AUDATA, 0xAC,0x45);
   while (!MP3_DREQ);  
-  //ConsoleWrite("\r\nAfter setting Sample rate:");
-  //ConsolePutHex16(Mp3ReadRegister(SPI_AUDATA)); 
-  //ConsoleWrite("\r\n");
-  //DelayMs(100);
+
 }
 
 
