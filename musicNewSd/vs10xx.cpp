@@ -3,10 +3,11 @@
  * \todo safe rewind
  * \todo VS1003 WMA "wma-bytes-left" variable adjustment at ff/rew
  */
-
+ 
+#include <WProgram.h>
 #include "vs10xx.h"
-#include "filesys.h"
-#include "storage.h"
+//#include "filesys.h"
+//#include "storage.h"
 #include "ui.h"
 
 #include "config.h"
@@ -319,116 +320,5 @@ void SendZerosToVS10xx(){
 }  
 
 
-/** Send a number of disk sectors to vs10xx.
- * Starting from current value in global variable sectorAddress,
- * sends a number of disk sectors to vs10xx and returns. */
-unsigned char PlayDiskSectors (unsigned int nSectorsToPlay)
-{
-  
-  /** How many sectors to send between ff/rew commands */
-  
 
-  //PrepareToReadDiskSector(sectorAddress.l);
-       SPCR = (1 << SPE) | (1 << MSTR);// //SPICLK=CPU/4
-
-     
-  while (nSectorsToPlay--)
-  {
-  
-  
-    AvailableProcessorTime();
-    
-
-    ReadDiskSector(sectorAddress.l);
-
-    /* If playing state is something else than "play normally",
-       exit returning the request number. */
-    if ((playingState==PS_END_OF_SONG)||
-	(playingState==PS_NEXT_SONG)||
-	(playingState==PS_RECORDING)||
-	(playingState==PS_PREVIOUS_SONG)){
-  	SPCR = (1 << SPE) | (1 << MSTR) |(1 << SPR0);//| (1 << SPR1);//SPICLK=CPU/16
-      return playingState;
-    }
- 	
-    sectorAddress.l++;
-    /*if (nSectorsToPlay){
-      //Do not seek after the last sector
-      PrepareToReadDiskSector(sectorAddress.l);
-    }*/
-   //Mp3WriteRegister (SPI_MODE, 0x0C, 0x00); /* Newmode, No L1-2 */
-
-     
-    Mp3SelectData();
-
-
-    dataBufPtr = diskSect.raw.buf;
-	
-    while (dataBufPtr < diskSect.raw.buf+512)
-	{
-      if (!MP3_DREQ)
-	  {
-        while (!MP3_DREQ)
-		{
-          Mp3DeselectData();
-          AvailableProcessorTime();
-          Mp3SelectData();
-        }
-      }
-      //GREEN_LED = LED_OFF;
-      //LED_OFF(GREEN_LED);
-      /* Send 32 octets of disk block data to VS10xx */
-
-   
-        
-      SPIPutCharWithoutWaiting(*dataBufPtr++);
-      SPIWait();
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      //LED_Sel();
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIPutChar(*dataBufPtr++);
-      SPIWait();
-      //LED_Sel();
-      //Mp3WriteRegister (SPI_MODE, 0x08, 0x00); /* Newmode, No L1-2 */
-
-    }
-	//SPISpeed(SPI1, SPI_BaudRatePrescaler_256);
-
-        
-	//isWritingVs = 0;
-    SPIWait();
-    Mp3DeselectData();
-  }
-
-	SPCR = (1 << SPE) | (1 << MSTR) |(1 << SPR0);//| (1 << SPR1);//SPICLK=CPU/16
-  return 0; //OK Exit
-}
 
