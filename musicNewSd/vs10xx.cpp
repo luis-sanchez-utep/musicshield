@@ -6,9 +6,6 @@
  
 #include <WProgram.h>
 #include "vs10xx.h"
-//#include "filesys.h"
-//#include "storage.h"
-#include "ui.h"
 
 #include "config.h"
 #include  <avr/pgmspace.h>

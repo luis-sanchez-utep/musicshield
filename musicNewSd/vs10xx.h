@@ -7,8 +7,6 @@
 #ifndef VS10XX_H
 #define VS10XX_H
 
-//#include "board.h"
-#include "ui.h"
 #include "config.h"
 
 //extern u8 isWritingVs;

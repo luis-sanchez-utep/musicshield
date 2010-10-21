@@ -2,7 +2,6 @@
 #include <WProgram.h>
 #include <avr/io.h>
 #include "config.h"
-//#include "filesys.h"
 #include "player.h"
 #include "vs10xx.h"
 //#include "record.h"

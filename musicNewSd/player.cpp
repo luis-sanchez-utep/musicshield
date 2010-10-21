@@ -1,27 +1,15 @@
 #include <WProgram.h>
-//#include "filesys.h"
-//#include "storage.h"
 #include "string.h"
-//#include "mmc.h"
 #include "player.h"
 #include "config.h"
-#include "ui.h"
 #include "vs10xx.h"
 //#include "NewSoftSerial.h"
 #include <SdFat.h>
 #include <SdFatUtil.h>
 #include "newSDLib.h"
-#include "buffer.h"
 //extern NewSoftSerial mySerial;
 
-/** Playing State Global */
- playingstatetype playingState = PS_NORMAL;
-
-unsigned char playStop = 1; // play or stop flag,1-play,0-stop
-
-unsigned char currentFile = 0;
-
-
+int playStop = 0;
 unsigned char g_volume = 40;//used for controling the volume
 int redPwm = 200;//used for controling the brightness of red led
 unsigned int greenFreq = 5000;//used for controling the flash frequency of green led
@@ -50,7 +38,7 @@ void ControlLed()
 	
 }
 
-
+/*
 void CheckKey()
 {
   //static unsigned char volume = 40;
@@ -129,7 +117,7 @@ void CheckKey()
   
   
 }
-/*
+
 void IPODCommandProcess()
 {
 	if(mySerial.available())
@@ -188,8 +176,8 @@ void IPODCommandProcess()
 
 /** This function is called when the player is playing a song
  and there is free processor time. The basic task of this
- function is to implement the player user interface. */
-void AvailableProcessorTime()
+ function is to implement the player user interface.*/
+/*void AvailableProcessorTime()
 {
 	
 	do
@@ -207,7 +195,7 @@ void AvailableProcessorTime()
   	//do other things
 	ControlLed();
 	
-}
+}*/
 
 int playFile(char *fileName)
 {
@@ -216,35 +204,36 @@ int playFile(char *fileName)
   
   openFile(fileName);//open music file
 
-  int len = 512;
   int readLen = 0;
+  byte readBuf[READ_BUF_LEN];
+  byte *tp = readBuf;
   while(1)
   {
-    readLen = readFile(diskSect.raw.buf,len);//read file content length of 512 every time
+    readLen = readFile(readBuf,READ_BUF_LEN);//read file content length of 512 every time
+    tp = readBuf;
     //Serial.println(readLen);
 
     Mp3SelectData();
 
-    dataBufPtr = diskSect.raw.buf;
-
-    while (dataBufPtr < diskSect.raw.buf+readLen)
+    while (tp < readBuf+readLen)
     {
       if (!MP3_DREQ)
       {
         while (!MP3_DREQ)
         {
           Mp3DeselectData();
-          AvailableProcessorTime();
+          //AvailableProcessorTime();//do interactive things
           Mp3SelectData();
         }
       }
       // Send music content data to VS10xx 
-      SPIPutChar(*dataBufPtr++);
+      SPIPutChar(*tp++);
     }
+    
     SPIWait();
     Mp3DeselectData();
     
-    if(readLen < len)
+    if(readLen < READ_BUF_LEN)
     {
       Mp3WriteRegister(SPI_MODE,0,SM_OUTOFWAV);
       SendZerosToVS10xx();
