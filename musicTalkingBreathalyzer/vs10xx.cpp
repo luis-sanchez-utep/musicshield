@@ -12,9 +12,8 @@
 
 
 #define SKIP_PLUGIN_VARNAME
-PROGMEM const unsigned short patch[] = {
+/*PROGMEM const unsigned short patch[] = {
 #include "vs1053b_patches.h"
-//#include "vs1053b_patches_flac.h"
 };
 
 void LoadUserPatch(void) 
@@ -28,14 +27,14 @@ void LoadUserPatch(void)
     unsigned short addr, n, val;
     addr = pgm_read_word(&patch[i++]);
     n = pgm_read_word(&patch[i++]);
-    if (n & 0x8000U) { /* RLE run, replicate n samples */
+    if (n & 0x8000U) { // RLE run, replicate n samples 
       n &= 0x7FFF;
       val = pgm_read_word(&patch[i++]);
       while (n--) {
         Mp3WriteRegister(addr, val>>8, val & 0xff);
         
       }
-    } else {           /* Copy run, copy n samples */
+    } else {           //Copy run, copy n samples 
       while (n--) {
         val = pgm_read_word(&patch[i++]);
         Mp3WriteRegister(addr, val>>8, val & 0xff);
@@ -44,7 +43,7 @@ void LoadUserPatch(void)
   }
   //delay(1);
   while (!MP3_DREQ);
-}
+}*/
 
 void Mp3WriteRegister(unsigned char addressbyte,unsigned char highbyte,unsigned char lowbyte)
 { 
@@ -146,7 +145,7 @@ void Mp3SoftReset(){
   
   while (!MP3_DREQ);
   
-  LoadUserPatch();
+  //LoadUserPatch();
 
 }
 
@@ -205,7 +204,7 @@ void Mp3Reset()
   while (!MP3_DREQ);
   
   
-  //Mp3SoftReset();//comment this, as it will be executed everytime playing a music file.
+  Mp3SoftReset();//comment this, as it will be executed everytime playing a music file.
   //Mp3SoftResetWithoutPatch();
 
   Mp3WriteRegister(SPI_WRAMADDR, 0xc0, 0x13);

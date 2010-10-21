@@ -6,8 +6,8 @@
 #include "vs10xx.h"
 //#include "record.h"
 
-#include <SdFat.h>
-#include <SdFatUtil.h>
+#include <Fat16.h>
+#include <Fat16Util.h>
 #include "newSDLib.h"
 
 //#include <NewSoftSerial.h>
@@ -34,7 +34,8 @@ void setup()
   Mp3Reset();
    //RED_LED_ON();
   //delay(1000);//give enough time to stable the power to the SD card, so that, the intialization will be much easier to succeed.
-  initialSDCard();
+  if (!initialSDCard())
+    return;
 
   //openFile("trackM.ogg");
 }
