@@ -1,7 +1,8 @@
-#include "filesys.h"
-#include "storage.h"
+#include <WProgram.h>
+//#include "filesys.h"
+//#include "storage.h"
 #include "string.h"
-#include "mmc.h"
+//#include "mmc.h"
 #include "player.h"
 #include "config.h"
 #include "ui.h"
@@ -16,47 +17,6 @@
 unsigned char playStop = 1; // play or stop flag,1-play,0-stop
 
 unsigned char currentFile = 0;
-
-/** Plays a disk file. Returns 1) if the file ends or 2) if the global
-    variable playingState is not PS_NORMAL i.e. user has requested 
-    stop or next or previous.*/
-void PlayCurrentFile()
-{
-   char c, nFragments;
-
-  playingState = PS_NORMAL; /* Request to play normally */
-  //uiMode = UI_SPEC; /* User interface: show title SPECANA FOR VS1003*/
-
-  ///LcdLocateHome();
-  ///LcdPutConstantString("Opening ");
-
-  //Serial.print("\r\nBuilding file fragment table...");
-
-  //sectorAddress.l = album[currentAlbumCnt].track[currentFile].trackAddr.l;
-  delay(100);//delay here is very important, give some time to sd card.---by Icing
-  nFragments = BuildFragmentTable(); /* Too slow, rewrite! */
-  //Serial.print("Fragments: ");
-  //Serial.print(nFragments,DEC);
-
-  ///LcdLocateHome();
-  ///LcdPutConstantString("Playing ");
-
-  for (c=0; c<nFragments; c++){
-    sectorAddress.l = fragment[c].start;
-    //ConsoleWrite ("\r\nPlayer: Playing from sector ");
-    //ConsolePutUInt (sectorAddress.l);
-    if (PlayDiskSectors(fragment[c].length)!=0){
-      Mp3WriteRegister(SPI_MODE,0,SM_OUTOFWAV);
-      SendZerosToVS10xx();
-      return; //return without touching the value of playingState
-    }
-  }
-  SendZerosToVS10xx();
-
-  // After finishing normally default to requesting to play next song        
-  playingState = PS_NEXT_SONG;
-}
-
 
 
 unsigned char g_volume = 40;//used for controling the volume
@@ -246,41 +206,3 @@ void AvailableProcessorTime()
 	
 }
 
-void Play()
-{
-  playingState = PS_NEXT_SONG;
-
-  currentFile = 1;
-
-  
-  //cyclely play 
-  while(1)
-  {
-
-	 //CheckPlay();
-	 //CheckKey();
-	 AvailableProcessorTime();
-	 
-	 if(1 ==playStop)
-	 {
-	 	if(OpenFile(currentFile))
-	 	{	
-			//if open failed, then try it again
-	 		if(OpenFile(currentFile))
-			{
-				playStop = 0;
-				playingState = PS_NEXT_SONG;
-  				currentFile = 1;
-				continue;
-			}
-	 	}
-		
-		PlayCurrentFile();
-		if (playingState == PS_PREVIOUS_SONG) currentFile--;
-	    if (playingState == PS_NEXT_SONG) currentFile++;
-    	if (currentFile==0) currentFile = 1;
-     	//if (playingState == PS_END_OF_SONG) playingState = PS_NORMAL; 
-		Mp3SoftReset();
-	 }
-  }
-}
