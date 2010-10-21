@@ -1,17 +1,9 @@
 #ifndef __PLAYER_H
 #define __PLAYER_H
 
-#include "ui.h"
 
+#define READ_BUF_LEN  512
 
-
-extern unsigned char playStop;
-extern playingstatetype playingState;
-
-extern unsigned char currentFile;
-
-//void Play();
-//void CheckPlay();
 void CheckKey();
 int playFile(char *fileName);
 
