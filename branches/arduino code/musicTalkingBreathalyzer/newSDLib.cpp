@@ -1,47 +1,48 @@
-#include <SdFat.h>
-#include <SdFatUtil.h>
+#include <Fat16.h>
+#include <Fat16Util.h>
 #include "newSDLib.h"
 #include "vs10xx.h"
 
-Sd2Card card;
-SdVolume volume;
-SdFile root;
-SdFile file;
+SdCard card;
+Fat16 file;
 
 void error_P(const char* str) {
   PgmPrint("error: ");
   SerialPrintln_P(str);
-  if (card.errorCode()) {
+  if (card.errorCode) {
     PgmPrint("SD error: ");
-    Serial.print(card.errorCode(), HEX);
-    Serial.print(',');
-    Serial.println(card.errorData(), HEX);
+    Serial.print(card.errorCode, HEX);
   }
-  while(1);
+  //while(1);
 }
 
-void initialSDCard()
+int initialSDCard()
 {
-  // initialize the SD card at SPI_HALF_SPEED to avoid bus errors with
-  // breadboards.  use SPI_FULL_SPEED for better performance.
-  if (!card.init(SPI_HALF_SPEED)) error("card.init failed");
-
-  // initialize a FAT volume
-  if (!volume.init(&card)) error("volume.init failed");
-
-  // open the root directory
-  if (!root.openRoot(&volume)) error("openRoot failed");
-
+  //SPI speed: 0 - F_CPU/2, 1 - F_CPU/4
+  if (!card.init(0))
+ {
+   error("card.init failed");
+    return 0;
+ }
+  // initialize a FAT16 volume
+  if (!Fat16::init(&card))
+ {
+   error("Fat16::init");
+   return 0;
+ }
+ return 1;
 }
 
-void openFile(char *fileName)
+int openFile(char *fileName)
 {
-  if (file.open(&root, fileName, O_READ)) {
+  if (file.open(fileName, O_READ)) {
     Serial.write(fileName);
     Serial.println(" opened");
+    return 1;
   }
   else{
     error("open file failed");
+    return 0;
   }
 }
 

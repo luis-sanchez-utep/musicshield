@@ -4,8 +4,8 @@
 #include "config.h"
 #include "vs10xx.h"
 //#include "NewSoftSerial.h"
-#include <SdFat.h>
-#include <SdFatUtil.h>
+#include <Fat16.h>
+#include <Fat16Util.h>
 #include "newSDLib.h"
 //extern NewSoftSerial mySerial;
 
@@ -201,9 +201,11 @@ int playFile(char *fileName)
 {
 
   Mp3SoftReset();
+  //Mp3Reset();
   
-  openFile(fileName);//open music file
-
+  if(!openFile(fileName)){//open music file
+    return 0;
+  }
   int readLen = 0;
   byte readBuf[READ_BUF_LEN];
   byte *tp = readBuf;
