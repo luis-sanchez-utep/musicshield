@@ -35,6 +35,7 @@ void LoadUserPatch(void)
       val = pgm_read_word(&patch[i++]);
       while (n--) {
         Mp3WriteRegister(addr, val>>8, val & 0xff);
+        
       }
     } else {           /* Copy run, copy n samples */
       while (n--) {
@@ -44,8 +45,7 @@ void LoadUserPatch(void)
     }
   }
   //delay(1);
-  while (!MP3_DREQ)
-    ;
+  while (!MP3_DREQ);
 }
 
 void Mp3WriteRegister(unsigned char addressbyte,unsigned char highbyte,unsigned char lowbyte)
@@ -57,6 +57,24 @@ void Mp3WriteRegister(unsigned char addressbyte,unsigned char highbyte,unsigned 
   //SPIPutCharWithoutWaiting(VS_WRITE_COMMAND); 
   SPIPutChar(VS_WRITE_COMMAND); 
   //delay(1);
+  SPIPutChar((addressbyte)); 
+
+  SPIPutChar((highbyte)); 
+  SPIPutChar((lowbyte)); 
+  SPIWait(); 
+  Mp3DeselectControl(); 
+  
+  //SPSR = (1<<SPI2X);	
+}
+void Mp3WriteRegisterWithDelay(unsigned char addressbyte,unsigned char highbyte,unsigned char lowbyte,int delayMicroSec)
+{ 
+  //SPSR = 0;	
+  
+  Mp3DeselectData();
+  Mp3SelectControl(); 
+  //SPIPutCharWithoutWaiting(VS_WRITE_COMMAND); 
+  SPIPutChar(VS_WRITE_COMMAND); 
+  delayMicroseconds(delayMicroSec);
   SPIPutChar((addressbyte)); 
 
   SPIPutChar((highbyte)); 
@@ -129,7 +147,7 @@ void Mp3SoftReset(){
   Mp3WriteRegister(SPI_WRAM, 0x00, 0x0C);
   
   while (!MP3_DREQ);
-
+  
   LoadUserPatch();
 
 }
@@ -178,28 +196,19 @@ void Mp3Reset()
   //TestVsRegister();
    //while(1);
   
-#if 0
-  ConsoleWrite("ClockF:");
-  ConsolePutHex16(Mp3ReadRegister(SPI_CLOCKF));
-  ConsolePutChar(13);
-#endif
-  
   /* Set clock register, doubler etc. */
   Mp3WriteRegisterWithDelay(SPI_CLOCKF, 0xB8, 0x00); 
+  
 #if 1
   Serial.print("\r\nClockF:");
   Serial.println(Mp3ReadRegister(SPI_CLOCKF),HEX);
-  
 #endif
-  
-  delay(1);
   /* Wait for DREQ */
   while (!MP3_DREQ);
-
   
-  Mp3SoftReset();
+  
+  //Mp3SoftReset();//comment this, as it will be executed everytime playing a music file.
   //Mp3SoftResetWithoutPatch();
-
 
   Mp3WriteRegister(SPI_WRAMADDR, 0xc0, 0x13);
 #if 0

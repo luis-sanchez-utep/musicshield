@@ -69,6 +69,8 @@ void Mp3SoftReset();
 
 
 void Mp3WriteRegister(unsigned char addressbyte,unsigned char highbyte,unsigned char lowbyte);
+void Mp3WriteRegisterWithDelay(unsigned char addressbyte,unsigned char highbyte,unsigned char lowbyte);
+void Mp3WriteRegisterWithDelay(unsigned char addressbyte,unsigned char highbyte,unsigned char lowbyte,int delayMicroSec);
 
 /** Set VS10xx Volume Register */
 #define Mp3SetVolume(leftchannel,rightchannel){\

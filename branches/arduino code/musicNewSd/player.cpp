@@ -6,9 +6,9 @@
 #include "config.h"
 #include "ui.h"
 #include "vs10xx.h"
-#include "NewSoftSerial.h"
+//#include "NewSoftSerial.h"
 
-extern NewSoftSerial mySerial;
+//extern NewSoftSerial mySerial;
 
 /** Playing State Global */
  playingstatetype playingState = PS_NORMAL;
@@ -166,7 +166,7 @@ void CheckKey()
   
   
 }
-
+/*
 void IPODCommandProcess()
 {
 	if(mySerial.available())
@@ -221,7 +221,7 @@ void IPODCommandProcess()
 		}
 	}
 }
-
+*/
 
 /** This function is called when the player is playing a song
  and there is free processor time. The basic task of this
@@ -233,7 +233,7 @@ void AvailableProcessorTime()
 	{
   		CheckKey();
   
- 		 IPODCommandProcess();
+ 		 //IPODCommandProcess();
 		 
 		if(0 == playStop)
 		{
