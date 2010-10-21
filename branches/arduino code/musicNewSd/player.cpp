@@ -8,7 +8,10 @@
 #include "ui.h"
 #include "vs10xx.h"
 //#include "NewSoftSerial.h"
-
+#include <SdFat.h>
+#include <SdFatUtil.h>
+#include "newSDLib.h"
+#include "buffer.h"
 //extern NewSoftSerial mySerial;
 
 /** Playing State Global */
@@ -204,5 +207,56 @@ void AvailableProcessorTime()
   	//do other things
 	ControlLed();
 	
+}
+
+int playFile(char *fileName)
+{
+
+  Mp3SoftReset();
+  
+  openFile(fileName);//open music file
+
+  int len = 512;
+  int readLen = 0;
+  while(1)
+  {
+    readLen = readFile(diskSect.raw.buf,len);//read file content length of 512 every time
+    //Serial.println(readLen);
+
+    Mp3SelectData();
+
+    dataBufPtr = diskSect.raw.buf;
+
+    while (dataBufPtr < diskSect.raw.buf+readLen)
+    {
+      if (!MP3_DREQ)
+      {
+        while (!MP3_DREQ)
+        {
+          Mp3DeselectData();
+          AvailableProcessorTime();
+          Mp3SelectData();
+        }
+      }
+      // Send music content data to VS10xx 
+      SPIPutChar(*dataBufPtr++);
+    }
+    SPIWait();
+    Mp3DeselectData();
+    
+    if(readLen < len)
+    {
+      Mp3WriteRegister(SPI_MODE,0,SM_OUTOFWAV);
+      SendZerosToVS10xx();
+      break;
+    }
+  };
+  Serial.println("played over\r\n");
+  
+  if(file.close() == 0)//close file
+  {
+    error("close file failed");
+  }
+  return 0; //OK Exit
 }
 

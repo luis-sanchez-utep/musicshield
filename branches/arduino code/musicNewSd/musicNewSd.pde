@@ -43,7 +43,10 @@ void setup()
 
 void loop()
 { 
-  playFile("blow0.wav");
+  playFile("trackM.ogg");
+  playFile("trackN.ogg");
+  playFile("trackO.ogg");
+  /*playFile("blow0.wav");
   playFile("blow1.wav");
   playFile("blow2.wav");
   playFile("blow3.wav");
@@ -70,7 +73,7 @@ void loop()
   playFile("wait0.wav");
   playFile("wait1.wav");
   playFile("wait2.wav");
-  playFile("wait3.wav");
+  playFile("wait3.wav");*/
 }
 
 
