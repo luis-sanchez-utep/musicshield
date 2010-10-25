@@ -42,8 +42,8 @@ void error_P(const char* str) {
 
 int initialSDCard()
 {
-  //SPI speed: 0 - F_CPU/2, 1 - F_CPU/4
-  if (!card.init(0))
+  //SPI speed: 0 - F_CPU/2, 1 - F_CPU/4; Chip Select Pin:10-pin10,
+  if (!card.init(0,10))
   {
     error("card.init failed");
     return 0;
